@@ -9,17 +9,11 @@ from config import settings
 # pymongo wrapper
 class Mongo():
 
-    # Cron is for testing purposes
-    internal_collections = ['logs','sessions']
-    application_collections = []
-
     host = settings.MONGO['host']
     port = settings.MONGO['port']
     user = settings.MONGO['user']
     password = settings.MONGO['password']
     database = settings.MONGO['database']
-    valid_collections = internal_collections \
-                        + application_collections
 
 
     def __init__(self, dbsettings=None):
@@ -43,7 +37,7 @@ class Mongo():
         
         if self._connection is None:
             self._connection = Connection(self.host, self.port)
-            return self._connection
+        return self._connection
     
     def get_database(self):
         """"Get database from MongoDB connection. """
@@ -55,12 +49,9 @@ class Mongo():
         return self._database
 
     def get_collection(self, collection):
-        db = self.get_database()
+        db = self.get_database()          
         
-        if collection in self.valid_collections:            
-            collection = db[collection]
-        else:
-            return False
+        collection = db[collection]
 
         return collection
 
