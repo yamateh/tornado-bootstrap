@@ -15,6 +15,10 @@ class Application():
     def __init__(self):
         self.application = None
 
+    def init_routes(self):
+        from routes import RouteLoader
+        return RouteLoader.load('controllers')
+
     #Init logging on database or file
     def init_logging(self,log):
             if log == 'db':
@@ -35,8 +39,7 @@ class Application():
         self.init_logging(settings.log)
 
         #routes
-        #TODO: change to dynamic init from controllers
-        routes = [(r"/", MainHandler)]
+        routes = self.init_routes()
 
         self.application = web.Application(routes,**tornado_settings)
 
