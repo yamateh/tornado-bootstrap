@@ -21,14 +21,21 @@ class Mongo():
     valid_collections = internal_collections \
                         + application_collections
 
-    def __init__(self):
+
+    def __init__(self, dbsettings=None):
         if not pymongo:
             raise exceptions.ImproperlyConfigured(
                     "You need to install the pymongo library to use the "
                     "MongoDB backend.")
-
+        if dbsettings != None:
+            self.host = dbsettings['host']
+            self.port = dbsettings['port']
+            self.user = dbsettings['user']
+            self.password = dbsettings['password']
+            self.database = dbsettings['database']
         self._database = None
         self._connection = None
+
     
     def get_connection(self):
         """Connect to the MongoDB server."""
@@ -68,3 +75,4 @@ class Mongo():
 
         
 mongo = Mongo()
+test_mongo = Mongo(settings.TEST_MONGO)

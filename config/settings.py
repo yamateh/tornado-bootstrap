@@ -15,5 +15,12 @@ MONGO = {
     'user': '',
     'password': '',
     'database': 'bootstrap',
-    'test_database': 'test_bootstrap'
+}
+
+TEST_MONGO  = {
+    'port': 27017,
+    'host': '127.0.0.1',
+    'user': '',
+    'password': '',
+    'database': 'test_bootstrap'
 }

@@ -5,7 +5,7 @@ class Log():
     instance = None
     
     #init logger based on file directory to store or on database
-    def __init__(self,type='',log_file=''):
+    def __init__(self,type='',log_file='',test=False):
         if type == 'FILE' and log_file != '':
             #make sure we have a log directory
             dirname, filename = os.path.split(log_file)
@@ -19,7 +19,11 @@ class Log():
             self.file_logger.addHandler(hdlr)
             self.file_logger.setLevel(logging.DEBUG)
         else:
-            self.logs = mongo.get_collection('logs') 
+            if not test :
+                self.logs = mongo.get_collection('logs') 
+            else :
+                from mongodb import test_mongo
+                self.logs = test_mongo.get_collection('logs')
             self.destination = 'DB'
 
     # log message structure
@@ -41,8 +45,8 @@ class Log():
     
     # creates new logger
     @staticmethod
-    def create(type='FILE',log_file=''):
-        Log.instance = Log(type,log_file)
+    def create(type='FILE',log_file='',test=False):
+        Log.instance = Log(type,log_file,test)
         
     '''
         Logging methods

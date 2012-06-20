@@ -11,43 +11,47 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("Hello, world")
 
-#Init logging on database or file
-def init_logging(log):
-        if log == 'db':
-            Log.create()
-        else:
-            Log.create('FILE',log)
+class Application():
+    def __init__(self):
+        self.application = None
 
-def main():
+    #Init logging on database or file
+    def init_logging(self,log):
+            if log == 'db':
+                Log.create()
+            else:
+                Log.create('FILE',log)
 
-    #settings passed to tornado app
-    tornado_settings = {
-        "static_path": settings.static_path,
-        "cookie_secret": settings.cookie_secret,
-        "login_url": settings.login_url,
-    }
+    def main(self):
 
-    #init a logger
-    init_logging(settings.log)
+        #settings passed to tornado app
+        tornado_settings = {
+            "static_path": settings.static_path,
+            "cookie_secret": settings.cookie_secret,
+            "login_url": settings.login_url,
+        }
 
-    #routes
-    #TODO: change to dynamic init from controllers
-    routes = [(r"/", MainHandler)]
+        #init a logger
+        self.init_logging(settings.log)
 
-    application = web.Application(routes,**tornado_settings)
+        #routes
+        #TODO: change to dynamic init from controllers
+        routes = [(r"/", MainHandler)]
 
-    http_server = httpserver.HTTPServer(application)
-    http_server.listen(settings.port)
+        self.application = web.Application(routes,**tornado_settings)
 
-    Log.info("Ready and listening")
+        http_server = httpserver.HTTPServer(self.application)
+        http_server.listen(settings.port)
 
-    ioloop = tornado.ioloop.IOLoop().instance()
-    autoreload.start(ioloop)
-    try:
-        ioloop.start()
-    except KeyboardInterrupt:
-        pass
+        Log.info("Ready and listening")
+
+        ioloop = tornado.ioloop.IOLoop().instance()
+        autoreload.start(ioloop)
+        try:
+            ioloop.start()
+        except KeyboardInterrupt:
+            pass
 
 
 if __name__ == "__main__":
-    main()
+    (Application()).main()
