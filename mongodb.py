@@ -30,15 +30,14 @@ class Mongo():
         self._database = None
         self._connection = None
 
-    
     def get_connection(self):
         """Connect to the MongoDB server."""
         from pymongo.connection import Connection
-        
+
         if self._connection is None:
             self._connection = Connection(self.host, self.port)
         return self._connection
-    
+
     def get_database(self):
         """"Get database from MongoDB connection. """
         if self._database is None:
@@ -49,21 +48,20 @@ class Mongo():
         return self._database
 
     def get_collection(self, collection):
-        db = self.get_database()          
-        
+        db = self.get_database()
+
         collection = db[collection]
 
         return collection
 
     def store_entry(self, entry, collection):
         """ Stores a system entry  """
-        
+
         collection = self.get_collection(collection)
-        
+
         if collection:
             collection.save(entry, safe=True)
 
 
-        
 mongo = Mongo()
 test_mongo = Mongo(settings.TEST_MONGO)

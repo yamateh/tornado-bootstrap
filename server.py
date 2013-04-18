@@ -1,4 +1,6 @@
-import sys
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import tornado.ioloop
 from log import Log
 from tornado import autoreload
@@ -13,18 +15,18 @@ class MainHandler(tornado.web.RequestHandler):
 
 class Application():
     def __init__(self):
-        self.application = None
+        self._application = None
 
     def init_routes(self):
         from routes import RouteLoader
         return RouteLoader.load('controllers')
 
     #Init logging on database or file
-    def init_logging(self,log):
-            if log == 'db':
-                Log.create()
-            else:
-                Log.create('FILE',log)
+    def init_logging(self, log):
+        if log == 'db':
+            Log.create()
+        else:
+            Log.create('FILE', log)
 
     def main(self):
 
@@ -41,9 +43,9 @@ class Application():
         #routes
         routes = self.init_routes()
 
-        self.application = web.Application(routes,**tornado_settings)
+        self._application = web.Application(routes,**tornado_settings)
 
-        http_server = httpserver.HTTPServer(self.application)
+        http_server = httpserver.HTTPServer(self._application)
         http_server.listen(settings.port)
 
         Log.info("Ready and listening")
@@ -55,6 +57,8 @@ class Application():
         except KeyboardInterrupt:
             pass
 
+def main():
+    Application().main()
 
 if __name__ == "__main__":
-    (Application()).main()
+    main()
