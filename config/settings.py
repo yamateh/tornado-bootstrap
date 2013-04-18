@@ -1,9 +1,11 @@
 import os
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(BASE_PATH, '..'))
 
 port = 8080
 static_path = "%s/static" % PROJECT_ROOT
+template_path = "%s/templates" % PROJECT_ROOT
 cookie_secret = "ctMgP6m2TA+1p/NhyTSBWwcQ0TKR9U1fsOWdt6SQvVI="
 login_url = "/login"
 #define a log file... optionally just use the string 'db' to log it to mongo

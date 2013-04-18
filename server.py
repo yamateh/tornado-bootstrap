@@ -32,6 +32,7 @@ class Application():
 
         #settings passed to tornado app
         tornado_settings = {
+            "template_path": settings.template_path,
             "static_path": settings.static_path,
             "cookie_secret": settings.cookie_secret,
             "login_url": settings.login_url,

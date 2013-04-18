@@ -7,7 +7,7 @@ route_list = [
 
 
 class route(object):
-    """
+    '''
     taken from http://gist.github.com/616347
 
     decorates RequestHandlers and builds up a list of routables handlers
@@ -33,14 +33,14 @@ class route(object):
         pass
 
     my_routes = route.get_routes()
-    """
+    '''
     _routes = []
 
     def __init__(self, uri):
         self._uri = uri
 
     def __call__(self, _handler):
-        """gets called when we class decorate"""
+        '''gets called when we class decorate'''
         self._routes.append((self._uri, _handler))
         return _handler
 
