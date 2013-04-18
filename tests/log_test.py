@@ -1,5 +1,6 @@
 import os
 import sys
+
 app_path = os.getcwd()
 sys.path.insert(0,app_path)
 testing = "%s/tmp/tests/log/application.log" % app_path
@@ -25,7 +26,7 @@ class TestLogging(unittest.TestCase):
         Log.create('FILE',testing,True)
         Log.info('wololo')
         eq_(True, os.path.isfile(testing))
-    
+
     def test_log_type(self):
         Log.create('DB','',True)
         logs = test_mongo.get_collection('logs')

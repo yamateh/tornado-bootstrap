@@ -1,3 +1,4 @@
+import os
 #  will choose the FIRST match it comes too
 #  or define routes in your controller using @route(r'')
 route_list = [
@@ -8,7 +9,7 @@ route_list = [
 class route(object):
     """
     taken from http://gist.github.com/616347
-    
+
     decorates RequestHandlers and builds up a list of routables handlers
 
     Tech Notes (or "What the *@# is really happening here?")
@@ -51,29 +52,34 @@ class route(object):
 
 class RouteLoader(object):
     ''' taken from https://github.com/trendrr/whirlwind/blob/master/whirlwind/core/routes.py '''
-    
+
     @staticmethod
-    def load(package_name,include_routes_file=True):
+    def load(package_name, include_routes_file=True):
         loader = RouteLoader()
         return loader.init_routes(package_name,include_routes_file)
-        
+
     def init_routes(self,package_name,include_routes_file=True):
         import pkgutil,sys,inspect
-        
+
         package = __import__(package_name)
         controllers_module = sys.modules[package_name]
-        
+
         prefix = controllers_module.__name__ + "."
-        
-        for importer, modname, ispkg in pkgutil.iter_modules(controllers_module.__path__, prefix):
-            module = __import__(modname)
-        
+
+        # Zealot: support submodule
+        path = os.path.abspath(controllers_module.__path__[0])
+        root_length = len(os.path.dirname(path) + '/')
+        for root, dirs, files in os.walk(path):
+            module_root = root
+            module_prefix = root[root_length:].replace(os.sep, '.') + '.'
+            for importer, modname, ispkg in pkgutil.iter_modules([module_root], module_prefix):
+                module = __import__(modname)
+
         #grab the routes defined via the route decorator
         url_routes = route.get_routes()
-        
+
         #add the routes from our route file
         if include_routes_file:
             url_routes.extend(route_list)
-
 
         return url_routes
